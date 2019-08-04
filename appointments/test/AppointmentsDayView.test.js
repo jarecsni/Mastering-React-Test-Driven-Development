@@ -9,6 +9,8 @@ import {
 describe('Appointment', () => {
   let container;
   let customer;
+  const expectedRowCount = 5;
+  const defaultAppointment = {};
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -17,20 +19,85 @@ describe('Appointment', () => {
   const render = component =>
     ReactDOM.render(component, container);
 
+  const expectRow = (row, head, content) => {
+    expect(row).not.toBeNull();
+    expect(row.querySelector('th')).not.toBeNull();
+    expect(row.querySelector('th').textContent).toMatch(head);
+    expect(row.querySelector('td')).not.toBeNull();
+    expect(row.querySelector('td').textContent).toMatch(content);
+  }
+
   it('renders the customer first name', () => {
     customer = { firstName: 'Ashley' };
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch('Ashley');
+    render(<Appointment customer={customer} {...defaultAppointment}/>);
+    const table = container.querySelector('table');
+    expect(table).not.toBeNull();
+    expect(table.querySelectorAll('tr')).toHaveLength(expectedRowCount); 
+    const firstNameRow = table.querySelector('.first-name');
+    expectRow(firstNameRow, 'First name:', 'Ashley');
   });
 
   it('renders another customer first name', () => {
     customer = { firstName: 'Jordan' };
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch('Jordan');
+    render(<Appointment customer={customer} {...defaultAppointment}/>);
+    const table = container.querySelector('table');
+    expect(table).not.toBeNull();
+    expect(table.querySelectorAll('tr')).toHaveLength(expectedRowCount); 
+    const firstNameRow = table.querySelector('.first-name');
+    expectRow(firstNameRow, 'First name:', 'Jordan');
   });
+
+  it('renders the lastName correctly', () => {
+    customer = { firstName: 'Jordan', lastName: 'Smiths'};
+    render(<Appointment customer={customer} {...defaultAppointment}/>);
+    const table = container.querySelector('table');
+    expect(table).not.toBeNull();
+    expect(table.querySelectorAll('tr')).toHaveLength(expectedRowCount); 
+    const lastNameRow = table.querySelector('.last-name');
+    expectRow(lastNameRow, 'Last name:', 'Smiths');
+  });
+
+  it('renders the phone Number correctly', () => {
+    customer = { firstName: 'Jordan', lastName: 'Smiths', phoneNumber: '123456'};
+    render(<Appointment customer={customer} {...defaultAppointment}/>);
+    const table = container.querySelector('table');
+    expect(table).not.toBeNull();
+    expect(table.querySelectorAll('tr')).toHaveLength(expectedRowCount); 
+    const phoneRow = table.querySelector('.phone');
+    expectRow(phoneRow, 'Phone:', '123456');
+  });
+  it('renders the stylist correctly', () => {
+    customer = { firstName: 'Jordan', lastName: 'Smiths', 
+      phoneNumber: '123456'};
+    render(<Appointment customer={customer} stylist="Lynda"/>);
+    const table = container.querySelector('table');
+    expect(table).not.toBeNull();
+    expect(table.querySelectorAll('tr')).toHaveLength(expectedRowCount); 
+    const phoneRow = table.querySelector('.stylist');
+    expectRow(phoneRow, 'Stylist:', 'Lynda');
+  });
+  it('renders the service correctly', () => {
+    customer = { firstName: 'Jordan', lastName: 'Smiths', 
+      phoneNumber: '123456'};
+    
+    render(<Appointment customer={customer} service="Wash & blow"/>);
+    const table = container.querySelector('table');
+    expect(table).not.toBeNull();
+    expect(table.querySelectorAll('tr')).toHaveLength(expectedRowCount); 
+    const phoneRow = table.querySelector('.service');
+    expectRow(phoneRow, 'Service:', 'Wash & blow');
+  });
+  it('renders an appointment header with the time', () => {
+    const today = new Date();
+    const startsAt = today.setHours(12, 0);
+    render(<Appointment customer={customer} startsAt={startsAt}/>);
+    const header = container.querySelector('.header');
+    expect(header).not.toBeNull();
+    expect(header.textContent).toMatch("12:00");
+  })
 });
 
-describe('AppointmentsDayView', () => {
+describe.skip('AppointmentsDayView', () => {
   const today = new Date();
   const appointments = [
     {

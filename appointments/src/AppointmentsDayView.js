@@ -5,8 +5,34 @@ const appointmentTimeOfDay = startsAt => {
   return `${h}:${m}`;
 };
 
-export const Appointment = ({ customer }) => (
-  <div>{customer.firstName}</div>
+export const Appointment = ({ startsAt, customer, stylist, service }) => (
+  <React.Fragment>
+  <div class="header">{appointmentTimeOfDay(startsAt)}</div>
+  <table>
+    <tbody>
+      <tr class='first-name'>
+        <th>First name:</th>
+        <td>{customer.firstName}</td>
+      </tr>
+      <tr class='last-name'>
+        <th>Last name:</th>
+        <td>{customer.lastName}</td>
+      </tr>
+      <tr class='phone'>
+        <th>Phone:</th>
+        <td>{customer.phoneNumber}</td>
+      </tr>
+      <tr class='stylist'>
+        <th>Stylist:</th>
+        <td>{stylist}</td>
+      </tr>
+      <tr class='service'>
+        <th>Service:</th>
+        <td>{service}</td>
+      </tr>
+    </tbody>
+  </table>  
+  </React.Fragment>
 );
 
 export const AppointmentsDayView = ({ appointments }) => {
