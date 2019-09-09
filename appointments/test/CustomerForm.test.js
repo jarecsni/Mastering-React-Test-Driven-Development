@@ -86,4 +86,13 @@ describe('CustomerForm', () => {
     itSavesExistingValue('firstName');
     itSavesNewValue('firstName', 'Ashley');
   });
+
+  describe('last name field', () => {
+    itRendersAsATextBox('lastName');
+    itIncludesTheExistingValue('lastName');
+    itRendersALabel('lastName', 'Last name');
+    itAssignsAMatchingId('lastName', 'lastName');
+    itSavesExistingValue('lastName');
+    itSavesNewValue('lastName', 'Bentley');
+  });
 });
