@@ -95,4 +95,13 @@ describe('CustomerForm', () => {
     itSavesExistingValue('lastName');
     itSavesNewValue('lastName', 'Bentley');
   });
+
+  describe('phone number field', () => {
+    itRendersAsATextBox('phoneNumber');
+    itIncludesTheExistingValue('phoneNumber');
+    itRendersALabel('phoneNumber', 'Phone number');
+    itAssignsAMatchingId('phoneNumber', 'phoneNumber');
+    itSavesExistingValue('phoneNumber');
+    itSavesNewValue('phoneNumber', '07809423200');
+  });
 });
