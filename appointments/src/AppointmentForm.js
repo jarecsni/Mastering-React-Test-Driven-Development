@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 const timeIncrements = (numTimes, startTime, increment) =>
   Array(numTimes)
@@ -43,7 +43,8 @@ const mergeDateAndTime = (date, timeSlot) => {
 const RadioButtonIfAvailable = ({
   availableTimeSlots,
   date,
-  timeSlot
+  timeSlot,
+  handleChange
 }) => {
   const startsAt = mergeDateAndTime(date, timeSlot);
   if (
@@ -51,7 +52,14 @@ const RadioButtonIfAvailable = ({
       timeSlot => timeSlot.startsAt === startsAt
     )
   ) {
-    return <input name="startsAt" type="radio" value={startsAt} />;
+    return (
+      <input 
+        name="startsAt" 
+        type="radio" 
+        value={startsAt} 
+        onChange={handleChange}
+      />
+    );
   }
   return null;
 };
@@ -60,7 +68,8 @@ const TimeSlotTable = ({
   salonOpensAt,
   salonClosesAt,
   today,
-  availableTimeSlots
+  availableTimeSlots,
+  handleChange
 }) => {
   const dates = weeklyDateValues(today);
   const timeSlots = dailyTimeSlots(salonOpensAt, salonClosesAt);
@@ -84,6 +93,7 @@ const TimeSlotTable = ({
                   availableTimeSlots={availableTimeSlots}
                   date={date}
                   timeSlot={timeSlot}
+                  handleChange={handleChange}
                 />
               </td>
             ))}
@@ -104,7 +114,15 @@ export const AppointmentForm = ({
   availableTimeSlots
 }) => {
   const [appointment, setAppointment] = useState({ service });
-
+  
+  const handleStartsAtChange = useCallback(
+    ({ target: { value } }) => 
+      setAppointment(appointment => ({
+        ...appointment,
+        startsAt: parseInt(value)
+      }))
+  )
+  
   const handleServiceChange = ({ target: { value } }) =>
     setAppointment(appointment => ({
       ...appointment,
@@ -129,6 +147,7 @@ export const AppointmentForm = ({
         salonClosesAt={salonClosesAt}
         today={today}
         availableTimeSlots={availableTimeSlots}
+        handleChange={handleStartsAtChange}
       />
     </form>
   );
